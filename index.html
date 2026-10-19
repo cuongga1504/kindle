@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kindle Smart Dashboard</title>
+<style>
+  /* Reset & Tối ưu hóa hiển thị sắc nét cho màn hình E-Ink */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: "Bookerly", "Georgia", "Times New Roman", serif;
+    padding: 14px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .container {
+    border: 3px solid #000000;
+    padding: 14px 18px;
+  }
+
+  /* 1. Phần Thời gian & Ngày tháng */
+  .time-section {
+    text-align: center;
+    border-bottom: 3px solid #000000;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+
+  .clock {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 82px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+
+  .date {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* 2. Phần Thời tiết hiện tại & Lịch tháng */
+  .middle-section {
+    display: table;
+    width: 100%;
+    border-bottom: 3px solid #000000;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+
+  .col-weather, .col-calendar {
+    display: table-cell;
+    vertical-align: top;
+  }
+
+  .col-weather {
+    width: 44%;
+    border-right: 2px solid #000000;
+    padding-right: 14px;
+    text-align: center;
+  }
+
+  .col-calendar {
+    width: 56%;
+    padding-left: 14px;
+  }
+
+  .section-title {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-align: center;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 4px;
+  }
+
+  /* Chi tiết Thời tiết hiện tại */
+  .weather-icon {
+    font-size: 44px;
+    line-height: 1.1;
+    margin: 4px 0;
+  }
+
+  .weather-temp {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
+  .weather-desc {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 4px 0 8px 0;
+  }
+
+  .weather-details {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 13px;
+    text-align: left;
+    border-top: 1px dashed #000000;
+    padding-top: 6px;
+    line-height: 1.5;
+  }
+
+  .update-status {
+    font-size: 11px;
+    font-style: italic;
+    margin-top: 6px;
+    text-align: center;
+  }
+
+  /* Chi tiết Lịch tháng */
+  .calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .calendar-table th {
+    padding: 4px 2px;
+    border-bottom: 1px solid #000000;
+    font-weight: bold;
+  }
+
+  .calendar-table td {
+    padding: 5px 2px;
+  }
+
+  .today {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+    border-radius: 2px;
+  }
+
+  /* 3. Phần Dự báo 4 ngày tới */
+  .forecast-section {
+    border-bottom: 3px solid #000000;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+
+  .forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    text-align: center;
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+  }
+
+  .forecast-table td {
+    border-right: 1px dashed #000000;
+    padding: 4px 6px;
+    vertical-align: top;
+  }
+
+  .forecast-table td:last-child {
+    border-right: none;
+  }
+
+  .f-day {
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .f-icon {
+    font-size: 26px;
+    line-height: 1.2;
+    margin: 4px 0;
+  }
+
+  .f-temp {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+
+  .f-temp-min {
+    font-weight: normal;
+  }
+
+  .f-rain {
+    font-size: 12px;
+  }
+
+  /* 4. Phần Câu nói truyền cảm hứng (API) */
+  .quote-section {
+    text-align: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    min-height: 85px;
+  }
+
+  .quote-text {
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .quote-author {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .quote-hint {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 10px;
+    margin-top: 4px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 1. Khu vực Thời gian -->
+  <div class="time-section">
+    <div id="clock" class="clock">00:00</div>
+    <div id="date" class="date">ĐANG TẢI...</div>
+  </div>
+
+  <!-- 2. Khu vực Thời tiết hiện tại & Lịch -->
+  <div class="middle-section">
+    <!-- Cột Thời tiết (Chạm vào để làm mới thời tiết ngay lập tức) -->
+    <div class="col-weather" onclick="fetchWeatherAndForecast()">
+      <div class="section-title" id="location-name">ĐỒNG NAI</div>
+      <div id="w-icon" class="weather-icon">☀</div>
+      <div id="w-temp" class="weather-temp">--°C</div>
+      <div id="w-desc" class="weather-desc">Đang kết nối...</div>
+      <div class="weather-details">
+        <div><strong>Cảm giác:</strong> <span id="w-feel">--°C</span></div>
+        <div><strong>Độ ẩm:</strong> <span id="w-hum">--%</span> | <strong>Gió:</strong> <span id="w-wind">--</span></div>
+      </div>
+      <div id="w-status" class="update-status">Cập nhật: --:--</div>
+    </div>
+
+    <!-- Cột Lịch tháng -->
+    <div class="col-calendar">
+      <div id="cal-title" class="section-title">THÁNG -- / ----</div>
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th>
+          </tr>
+        </thead>
+        <tbody id="cal-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3. Khu vực Dự báo thời tiết 4 ngày tới -->
+  <div class="forecast-section">
+    <div class="section-title">DỰ BÁO 4 NGÀY TỚI</div>
+    <table class="forecast-table">
+      <tr id="forecast-row">
+        <td>Đang tải dữ liệu dự báo...</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 4. Khu vực Câu nói truyền cảm hứng (Chạm vào để đổi câu mới) -->
+  <div class="quote-section" onclick="updateQuote()">
+    <div id="quote-text" class="quote-text">“Đang tải câu nói truyền cảm hứng...”</div>
+    <div id="quote-author" class="quote-author">— ... —</div>
+    <div class="quote-hint">(Chạm vào câu nói để đổi câu mới)</div>
+  </div>
+</div>
+
+<script>
+  // =========================================================================
+  // CẤU HÌNH CÁ NHÂN HÓA (Bạn có thể sửa địa điểm và chế độ dịch tại đây)
+  // =========================================================================
+  var LOCATION_NAME = "ĐỒNG NAI";
+  var LAT = 10.95; // Vĩ độ (Đồng Nai: 10.95 | TP.HCM: 10.82 | Hà Nội: 21.03)
+  var LON = 106.82; // Kinh độ (Đồng Nai: 106.82 | TP.HCM: 106.63 | Hà Nội: 105.85)
+  
+  // Đặt true để tự động dịch danh ngôn tiếng Anh sang tiếng Việt, false để giữ tiếng Anh gốc
+  var AUTO_TRANSLATE_TO_VI = true;
+
+  // Kho câu nói tiếng Việt dự phòng (Tự động kích hoạt khi Kindle tắt Wi-Fi)
+  var fallbackQuotes = [
+    { text: "Hành trình vạn dặm luôn bắt đầu từ một bước chân.", author: "Lão Tử" },
+    { text: "Đọc sách không bằng suy ngẫm, học trường không bằng học đời.", author: "Khuyết danh" },
+    { text: "Sự giản dị là tột cùng của sự tinh tế.", author: "Leonardo da Vinci" },
+    { text: "Kỷ luật là cầu nối giữa mục tiêu và thành tựu.", author: "Jim Rohn" },
+    { text: "Chúng ta là những gì chúng ta lặp đi lặp lại mỗi ngày.", author: "Aristotle" },
+    { text: "Đừng đếm ngày tháng, hãy làm cho ngày tháng trở nên đáng nhớ.", author: "Muhammad Ali" },
+    { text: "Thời gian của bạn có hạn, đừng lãng phí nó để sống cuộc đời của người khác.", author: "Steve Jobs" },
+    { text: "Sách là giấc mơ mà bạn cầm trên tay.", author: "Neil Gaiman" },
+    { text: "Tri thức là sức mạnh.", author: "Francis Bacon" }
+  ];
+
+  // =========================================================================
+  // 1. ĐỒNG HỒ & NGÀY THÁNG
+  // =========================================================================
+  function updateTime() {
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    
+    var hStr = (hours < 10 ? "0" : "") + hours;
+    var mStr = (minutes < 10 ? "0" : "") + minutes;
+    document.getElementById("clock").innerHTML = hStr + ":" + mStr;
+
+    var days = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    var dateStr = days[now.getDay()] + ", " + now.getDate() + " Tháng " + (now.getMonth() + 1) + ", " + now.getFullYear();
+    document.getElementById("date").innerHTML = dateStr;
+  }
+
+  // =========================================================================
+  // 2. LỊCH THÁNG TỰ ĐỘNG
+  // =========================================================================
+  function generateCalendar() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth();
+    var today = now.getDate();
+
+    document.getElementById("cal-title").innerHTML = "THÁNG " + (month + 1) + " / " + year;
+
+    var firstDay = new Date(year, month, 1).getDay();
+    var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    var html = "";
+    var dayCount = 1;
+
+    for (var row = 0; row < 6; row++) {
+      html += "<tr>";
+      for (var col = 0; col < 7; col++) {
+        if ((row === 0 && col < startOffset) || dayCount > daysInMonth) {
+          html += "<td></td>";
+        } else {
+          var classToday = (dayCount === today) ? " class='today'" : "";
+          html += "<td" + classToday + ">" + dayCount + "</td>";
+          dayCount++;
+        }
+      }
+      html += "</tr>";
+      if (dayCount > daysInMonth) break;
+    }
+    document.getElementById("cal-body").innerHTML = html;
+  }
+
+  // =========================================================================
+  // 3. API CÂU NÓI TRUYỀN CẢM HỨNG (DummyJSON + MyMemory Dịch tự động)
+  // =========================================================================
+  function updateQuote() {
+    var apiUrl = "https://dummyjson.com/quotes/random";
+    var xhr = new XMLHttpRequest();
+    // Thêm tham số thời gian thực để tránh bộ nhớ đệm (cache) trên trình duyệt Kindle
+    xhr.open("GET", apiUrl + "?t=" + new Date().getTime(), true);
+    xhr.timeout = 10000;
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            var enQuote = data.quote;
+            var author = data.author;
+
+            if (AUTO_TRANSLATE_TO_VI) {
+              translateQuoteToVietnamese(enQuote, author);
+            } else {
+              renderQuoteOnScreen(enQuote, author);
+            }
+          } catch (e) {
+            useFallbackQuote();
+          }
+        } else {
+          useFallbackQuote();
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function translateQuoteToVietnamese(enText, author) {
+    var transUrl = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(enText) + "&langpair=en|vi";
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", transUrl, true);
+    xhr.timeout = 10000;
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            var res = JSON.parse(xhr.responseText);
+            var viText = res.responseData.translatedText;
+            if (viText && viText.indexOf("MYMEMORY WARNING") === -1) {
+              renderQuoteOnScreen(viText, author);
+            } else {
+              renderQuoteOnScreen(enText, author);
+            }
+          } catch (e) {
+            renderQuoteOnScreen(enText, author);
+          }
+        } else {
+          renderQuoteOnScreen(enText, author);
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function renderQuoteOnScreen(text, author) {
+    var quoteEl = document.getElementById("quote-text");
+    var authorEl = document.getElementById("quote-author");
+
+    // Tự động thu nhỏ chữ nếu câu nói dài để không đẩy tràn màn hình Kindle
+    if (text.length > 150) {
+      quoteEl.style.fontSize = "15px";
+    } else if (text.length > 100) {
+      quoteEl.style.fontSize = "16px";
+    } else {
+      quoteEl.style.fontSize = "18px";
+    }
+
+    quoteEl.innerHTML = "“" + text + "”";
+    authorEl.innerHTML = "— " + author + " —";
+  }
+
+  function useFallbackQuote() {
+    var randomIndex = Math.floor(Math.random() * fallbackQuotes.length);
+    renderQuoteOnScreen(fallbackQuotes[randomIndex].text, fallbackQuotes[randomIndex].author);
+  }
+
+  // =========================================================================
+  // 4. API THỜI TIẾT HIỆN TẠI & DỰ BÁO 4 NGÀY (Open-Meteo)
+  // =========================================================================
+  function fetchWeatherAndForecast() {
+    document.getElementById("location-name").innerHTML = LOCATION_NAME;
+    
+    var url = "https://api.open-meteo.com/v1/forecast"
+            + "?latitude=" + LAT + "&longitude=" + LON
+            + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m"
+            + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max"
+            + "&timezone=auto&forecast_days=5";
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.timeout = 15000;
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            renderCurrentWeather(data.current);
+            renderForecast(data.daily);
+            
+            var now = new Date();
+            var h = (now.getHours() < 10 ? "0" : "") + now.getHours();
+            var m = (now.getMinutes() < 10 ? "0" : "") + now.getMinutes();
+            document.getElementById("w-status").innerHTML = "Cập nhật lúc: " + h + ":" + m;
+          } catch (e) {
+            setFallbackWeather();
+          }
+        } else {
+          setFallbackWeather();
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  function renderCurrentWeather(current) {
+    document.getElementById("w-temp").innerHTML = Math.round(current.temperature_2m) + "°C";
+    document.getElementById("w-feel").innerHTML = Math.round(current.apparent_temperature) + "°C";
+    document.getElementById("w-hum").innerHTML = current.relative_humidity_2m + "%";
+    document.getElementById("w-wind").innerHTML = Math.round(current.wind_speed_10m) + " km/h";
+    
+    var wInfo = decodeWeatherCode(current.weather_code);
+    document.getElementById("w-icon").innerHTML = wInfo.icon;
+    document.getElementById("w-desc").innerHTML = wInfo.desc;
+  }
+
+  function renderForecast(daily) {
+    var html = "";
+    var shortDays = ["CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+
+    for (var i = 1; i <= 4; i++) {
+      if (!daily.time[i]) break;
+
+      var parts = daily.time[i].split("-");
+      var fDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      var dayName = shortDays[fDate.getDay()] + " (" + parts[2] + "/" + parts[1] + ")";
+
+      var info = decodeWeatherCode(daily.weather_code[i]);
+      var maxT = Math.round(daily.temperature_2m_max[i]);
+      var minT = Math.round(daily.temperature_2m_min[i]);
+      var rainProb = daily.precipitation_probability_max[i];
+      if (rainProb === null || rainProb === undefined) rainProb = 0;
+
+      html += "<td>"
+            + "<div class='f-day'>" + dayName + "</div>"
+            + "<div class='f-icon'>" + info.icon + "</div>"
+            + "<div class='f-temp'>" + maxT + "° <span class='f-temp-min'>/ " + minT + "°</span></div>"
+            + "<div class='f-rain'>Mưa: " + rainProb + "%</div>"
+            + "</td>";
+    }
+    document.getElementById("forecast-row").innerHTML = html;
+  }
+
+  function decodeWeatherCode(code) {
+    if (code === 0) return { icon: "☀", desc: "Trời quang mây" };
+    if (code === 1) return { icon: "🌤", desc: "Ít mây, nắng nhẹ" };
+    if (code === 2) return { icon: "⛅", desc: "Mây rải rác" };
+    if (code === 3) return { icon: "☁", desc: "Trời nhiều mây" };
+    if (code >= 45 && code <= 48) return { icon: "🌫", desc: "Có sương mù" };
+    if (code >= 51 && code <= 55) return { icon: "🌦", desc: "Mưa phùn nhẹ" };
+    if (code >= 61 && code <= 65) return { icon: "🌧", desc: "Có mưa rào" };
+    if (code >= 71 && code <= 77) return { icon: "❄", desc: "Trời lạnh" };
+    if (code >= 80 && code <= 82) return { icon: "🌧", desc: "Mưa rào lớn" };
+    if (code >= 95) return { icon: "⛈", desc: "Mưa dông" };
+    return { icon: "☁", desc: "Có mây" };
+  }
+
+  function setFallbackWeather() {
+    document.getElementById("w-status").innerHTML = "Đang ngoại tuyến (Offline)";
+    if (document.getElementById("w-temp").innerHTML === "--°C") {
+      document.getElementById("w-desc").innerHTML = "Chưa có mạng";
+    }
+  }
+
+  // =========================================================================
+  // 5. KHỞI CHẠY & VÒNG LẶP ĐỊNH KỲ
+  // =========================================================================
+  function init() {
+    updateTime();
+    generateCalendar();
+    updateQuote();
+    fetchWeatherAndForecast();
+
+    // Kiểm tra thời gian mỗi 60 giây
+    setInterval(function() {
+      updateTime();
+      var now = new Date();
+      // Sang ngày mới lúc 00:00 -> cập nhật lại bảng lịch
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        generateCalendar();
+      }
+      // Đầu mỗi giờ (phút 00) -> tự động lấy câu nói truyền cảm hứng mới
+      if (now.getMinutes() === 0) {
+        updateQuote();
+      }
+    }, 60000);
+
+    // Tự động cập nhật thời tiết & dự báo mỗi 30 phút
+    setInterval(fetchWeatherAndForecast, 1800000);
+  }
+
+  window.onload = init;
+</script>
+</body>
+</html>
