@@ -1,0 +1,64 @@
+name: Render Kindle Dashboard PNG
+
+on:
+  # Tự động chạy mỗi 30 phút
+  schedule:
+    - cron: '*/30 * * * *'
+  # Cho phép bấm nút chạy thử ngay lập tức trên giao diện GitHub
+  workflow_dispatch:
+  # Tự động chạy lại mỗi khi bạn sửa file index.html
+  push:
+    paths:
+      - 'index.html'
+
+permissions:
+  contents: write
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    env:
+      TZ: 'Asia/Ho_Chi_Minh'
+      # Thay đổi độ phân giải dưới đây theo dòng máy Kindle của bạn:
+      # Kindle Paperwhite 1/2/3: 758 x 1024
+      # Kindle Paperwhite 4 / Oasis 1: 1072 x 1448
+      # Kindle Paperwhite 5 / Oasis 2-3: 1236 x 1648
+      SCREEN_WIDTH: 758
+      SCREEN_HEIGHT: 1024
+
+    steps:
+      - name: 1. Tải mã nguồn về máy chủ ảo
+        uses: actions/checkout@v4
+
+      - name: 2. Cài đặt ফông chữ Tiếng Việt & ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto fonts-noto-color-emoji imagemagick
+
+      - name: 3. Chụp ảnh trang index.html bằng Playwright
+        run: |
+          npx -y playwright install chromium
+          npx -y playwright screenshot \
+            --viewport-size="${SCREEN_WIDTH},${SCREEN_HEIGHT}" \
+            --wait-for-timeout=5000 \
+            file://${GITHUB_WORKSPACE}/index.html \
+            raw_dashboard.png
+
+      - name: 4. Chuyển đổi sang chuẩn PNG 8-bit Grayscale cho Kindle E-Ink
+        run: |
+          convert raw_dashboard.png \
+            -gravity center \
+            -extent ${SCREEN_WIDTH}x${SCREEN_HEIGHT} \
+            -colorspace Gray \
+            -depth 8 \
+            -alpha off \
+            -define png:color-type=0 \
+            -strip \
+            dashboard.png
+
+      - name: 5. Lưu ảnh dashboard.png lên kho GitHub
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Kindle Bot"
+          git add dashboard.png
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update Kindle dashboard PNG" && git push)
