@@ -16,28 +16,47 @@
     background-color: #FFFFFF;
     color: #000000;
     font-family: "Bookerly", "Georgia", "Times New Roman", serif;
-    padding: 14px;
+    padding: 12px;
     width: 100%;
     height: 100%;
     overflow: hidden;
   }
 
-  .container {
-    border: 3px solid #000000;
-    padding: 14px 18px;
+  /* KỸ THUẬT ĐẢO MÀU CHỐNG LƯU ẢNH (GHOSTING) CHO E-INK */
+  body.eink-refresh,
+  body.eink-refresh * {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
   }
 
-  /* 1. Phần Thời gian & Ngày tháng */
+  body.eink-refresh .today {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  body.eink-refresh .today span {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  .container {
+    border: 3px solid #000000;
+    padding: 12px 16px;
+  }
+
+  /* 1. Phần Thời gian & Ngày tháng (Dương + Âm) */
   .time-section {
     text-align: center;
     border-bottom: 3px solid #000000;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
   }
 
   .clock {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 82px;
+    font-size: 78px;
     font-weight: bold;
     letter-spacing: 3px;
     line-height: 1;
@@ -47,8 +66,14 @@
     font-size: 18px;
     font-weight: bold;
     text-transform: uppercase;
-    margin-top: 8px;
+    margin-top: 6px;
     letter-spacing: 1px;
+  }
+
+  .lunar-header {
+    font-size: 15px;
+    font-style: italic;
+    margin-top: 4px;
   }
 
   /* 2. Phần Thời tiết hiện tại & Lịch tháng */
@@ -56,8 +81,8 @@
     display: table;
     width: 100%;
     border-bottom: 3px solid #000000;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
   }
 
   .col-weather, .col-calendar {
@@ -66,15 +91,16 @@
   }
 
   .col-weather {
-    width: 44%;
+    width: 42%;
     border-right: 2px solid #000000;
-    padding-right: 14px;
+    padding-right: 12px;
     text-align: center;
+    cursor: pointer;
   }
 
   .col-calendar {
-    width: 56%;
-    padding-left: 14px;
+    width: 58%;
+    padding-left: 12px;
   }
 
   .section-title {
@@ -83,7 +109,7 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-align: center;
     border-bottom: 2px solid #000000;
     padding-bottom: 4px;
@@ -91,7 +117,7 @@
 
   /* Chi tiết Thời tiết hiện tại */
   .weather-icon {
-    font-size: 44px;
+    font-size: 42px;
     line-height: 1.1;
     margin: 4px 0;
   }
@@ -124,37 +150,57 @@
     text-align: center;
   }
 
-  /* Chi tiết Lịch tháng */
+  /* Chi tiết Bảng Lịch tháng (Dương + Âm) */
   .calendar-table {
     width: 100%;
     border-collapse: collapse;
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 14px;
     text-align: center;
+    table-layout: fixed;
   }
 
   .calendar-table th {
-    padding: 4px 2px;
+    padding: 4px 1px;
     border-bottom: 1px solid #000000;
+    font-size: 12px;
     font-weight: bold;
   }
 
   .calendar-table td {
-    padding: 5px 2px;
+    padding: 3px 1px;
+    vertical-align: middle;
+  }
+
+  .solar-num {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.1;
+  }
+
+  .lunar-num {
+    display: block;
+    font-size: 10px;
+    line-height: 1.1;
+    margin-top: 1px;
+  }
+
+  .lunar-special {
+    font-weight: bold;
+    text-decoration: underline;
   }
 
   .today {
     background-color: #000000;
     color: #FFFFFF;
-    font-weight: bold;
-    border-radius: 2px;
+    border-radius: 3px;
   }
 
   /* 3. Phần Dự báo 4 ngày tới */
   .forecast-section {
     border-bottom: 3px solid #000000;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
   }
 
   .forecast-table {
@@ -167,7 +213,7 @@
 
   .forecast-table td {
     border-right: 1px dashed #000000;
-    padding: 4px 6px;
+    padding: 3px 6px;
     vertical-align: top;
   }
 
@@ -179,13 +225,13 @@
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .f-icon {
-    font-size: 26px;
-    line-height: 1.2;
-    margin: 4px 0;
+    font-size: 24px;
+    line-height: 1.1;
+    margin: 3px 0;
   }
 
   .f-temp {
@@ -199,27 +245,27 @@
   }
 
   .f-rain {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   /* 4. Phần Câu nói truyền cảm hứng (API) */
   .quote-section {
     text-align: center;
-    padding: 4px 8px;
+    padding: 2px 8px;
     cursor: pointer;
-    min-height: 85px;
+    min-height: 75px;
   }
 
   .quote-text {
-    font-size: 18px;
+    font-size: 17px;
     font-style: italic;
-    line-height: 1.4;
-    margin-bottom: 8px;
+    line-height: 1.35;
+    margin-bottom: 6px;
   }
 
   .quote-author {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -236,15 +282,16 @@
 <body>
 
 <div class="container">
-  <!-- 1. Khu vực Thời gian -->
-  <div class="time-section">
+  <!-- 1. Khu vực Thời gian & Ngày Âm Dương -->
+  <div class="time-section" onclick="refreshEInkScreen()">
     <div id="clock" class="clock">00:00</div>
     <div id="date" class="date">ĐANG TẢI...</div>
+    <div id="lunar-date" class="lunar-header">Âm lịch: ...</div>
   </div>
 
   <!-- 2. Khu vực Thời tiết hiện tại & Lịch -->
   <div class="middle-section">
-    <!-- Cột Thời tiết (Chạm vào để làm mới thời tiết ngay lập tức) -->
+    <!-- Cột Thời tiết -->
     <div class="col-weather" onclick="fetchWeatherAndForecast()">
       <div class="section-title" id="location-name">ĐỒNG NAI</div>
       <div id="w-icon" class="weather-icon">☀</div>
@@ -257,7 +304,7 @@
       <div id="w-status" class="update-status">Cập nhật: --:--</div>
     </div>
 
-    <!-- Cột Lịch tháng -->
+    <!-- Cột Lịch tháng (Kèm ngày Âm) -->
     <div class="col-calendar">
       <div id="cal-title" class="section-title">THÁNG -- / ----</div>
       <table class="calendar-table">
@@ -281,26 +328,23 @@
     </table>
   </div>
 
-  <!-- 4. Khu vực Câu nói truyền cảm hứng (Chạm vào để đổi câu mới) -->
+  <!-- 4. Khu vực Câu nói truyền cảm hứng -->
   <div class="quote-section" onclick="updateQuote()">
     <div id="quote-text" class="quote-text">“Đang tải câu nói truyền cảm hứng...”</div>
     <div id="quote-author" class="quote-author">— ... —</div>
-    <div class="quote-hint">(Chạm vào câu nói để đổi câu mới)</div>
+    <div class="quote-hint">(Chạm câu nói để đổi mới • Chạm đồng hồ để làm sạch mực E-Ink)</div>
   </div>
 </div>
 
 <script>
   // =========================================================================
-  // CẤU HÌNH CÁ NHÂN HÓA (Bạn có thể sửa địa điểm và chế độ dịch tại đây)
+  // CẤU HÌNH CÁ NHÂN HÓA
   // =========================================================================
   var LOCATION_NAME = "ĐỒNG NAI";
-  var LAT = 10.95; // Vĩ độ (Đồng Nai: 10.95 | TP.HCM: 10.82 | Hà Nội: 21.03)
-  var LON = 106.82; // Kinh độ (Đồng Nai: 106.82 | TP.HCM: 106.63 | Hà Nội: 105.85)
-  
-  // Đặt true để tự động dịch danh ngôn tiếng Anh sang tiếng Việt, false để giữ tiếng Anh gốc
+  var LAT = 10.95; 
+  var LON = 106.82;
   var AUTO_TRANSLATE_TO_VI = true;
 
-  // Kho câu nói tiếng Việt dự phòng (Tự động kích hoạt khi Kindle tắt Wi-Fi)
   var fallbackQuotes = [
     { text: "Hành trình vạn dặm luôn bắt đầu từ một bước chân.", author: "Lão Tử" },
     { text: "Đọc sách không bằng suy ngẫm, học trường không bằng học đời.", author: "Khuyết danh" },
@@ -314,7 +358,152 @@
   ];
 
   // =========================================================================
-  // 1. ĐỒNG HỒ & NGÀY THÁNG
+  // THUẬT TOÁN TÍNH ÂM LỊCH VIỆT NAM (GMT+7) - HỒ NGỌC ĐỨC
+  // =========================================================================
+  var CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
+  var CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
+
+  function INT(d) {
+    return Math.floor(d);
+  }
+
+  function jdFromDate(dd, mm, yy) {
+    var a = INT((14 - mm) / 12);
+    var y = yy + 4800 - a;
+    var m = mm + 12 * a - 3;
+    var jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045;
+    if (jd < 2299161) {
+      jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - 32083;
+    }
+    return jd;
+  }
+
+  function getNewMoonDay(k, timeZone) {
+    var T = k / 1236.85;
+    var T2 = T * T;
+    var T3 = T2 * T;
+    var dr = Math.PI / 180;
+    var Jd1 = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+    Jd1 = Jd1 + 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+    var M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+    var Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+    var F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+    var C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) + 0.0021 * Math.sin(2 * dr * M);
+    C1 = C1 - 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(dr * 2 * Mpr);
+    C1 = C1 - 0.0004 * Math.sin(dr * 3 * Mpr);
+    C1 = C1 + 0.0104 * Math.sin(dr * 2 * F) - 0.0051 * Math.sin(dr * (M + Mpr));
+    C1 = C1 - 0.0074 * Math.sin(dr * (M - Mpr)) + 0.0004 * Math.sin(dr * (2 * F + M));
+    C1 = C1 - 0.0004 * Math.sin(dr * (2 * F - M)) - 0.0006 * Math.sin(dr * (2 * F + Mpr));
+    C1 = C1 + 0.0010 * Math.sin(dr * (2 * F - Mpr)) + 0.0005 * Math.sin(dr * (2 * Mpr + M));
+    var deltat;
+    if (T < -11) {
+      deltat = 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3;
+    } else {
+      deltat = -0.000278 + 0.000265 * T + 0.000262 * T2;
+    }
+    var JdNew = Jd1 + C1 - deltat;
+    return INT(JdNew + 0.5 + timeZone / 24);
+  }
+
+  function getSunLongitude(jdn, timeZone) {
+    var T = (jdn - 2451545.5 - timeZone / 24) / 36525;
+    var T2 = T * T;
+    var dr = Math.PI / 180;
+    var M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
+    var L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
+    var DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+    DL = DL + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+    var L = L0 + DL;
+    L = L * dr;
+    L = L - Math.PI * 2 * (INT(L / (Math.PI * 2)));
+    return INT(L / Math.PI * 6);
+  }
+
+  function getLunarMonth11(yy, timeZone) {
+    var off = jdFromDate(31, 12, yy) - 2415021;
+    var k = INT(off / 29.530588853);
+    var nm = getNewMoonDay(k, timeZone);
+    var sunLong = getSunLongitude(nm, timeZone);
+    if (sunLong >= 9) {
+      nm = getNewMoonDay(k - 1, timeZone);
+    }
+    return nm;
+  }
+
+  function getLeapMonthOffset(a11, timeZone) {
+    var k = INT((a11 - 2415021.076998695) / 29.530588853 + 0.5);
+    var last = 0;
+    var i = 1;
+    var arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+    do {
+      last = arc;
+      i++;
+      arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+    } while (arc != last && i < 14);
+    return i - 1;
+  }
+
+  // Trả về mảng [Ngày Âm, Tháng Âm, Năm Âm, Nhuận (0/1), JulianDay]
+  function convertSolar2Lunar(dd, mm, yy) {
+    var timeZone = 7; // Múi giờ Việt Nam GMT+7
+    var dayNumber = jdFromDate(dd, mm, yy);
+    var k = INT((dayNumber - 2415021.076998695) / 29.530588853);
+    var monthStart = getNewMoonDay(k + 1, timeZone);
+    if (monthStart > dayNumber) {
+      monthStart = getNewMoonDay(k, timeZone);
+    }
+    var a11 = getLunarMonth11(yy, timeZone);
+    var b11 = a11;
+    var lunarYear;
+    if (a11 >= monthStart) {
+      lunarYear = yy;
+      a11 = getLunarMonth11(yy - 1, timeZone);
+    } else {
+      lunarYear = yy + 1;
+      b11 = getLunarMonth11(yy + 1, timeZone);
+    }
+    var lunarDay = dayNumber - monthStart + 1;
+    var diff = INT((monthStart - a11) / 29);
+    var lunarLeap = 0;
+    var lunarMonth = diff + 11;
+    if (b11 - a11 > 365) {
+      var leapMonthDiff = getLeapMonthOffset(a11, timeZone);
+      if (diff >= leapMonthDiff) {
+        lunarMonth = diff + 10;
+        if (diff == leapMonthDiff) {
+          lunarLeap = 1;
+        }
+      }
+    }
+    if (lunarMonth > 12) {
+      lunarMonth = lunarMonth - 12;
+    }
+    if (lunarMonth >= 11 && diff < 4) {
+      lunarYear -= 1;
+    }
+    return [lunarDay, lunarMonth, lunarYear, lunarLeap, dayNumber];
+  }
+
+  function getCanChiYear(lunarYear) {
+    return CAN[(lunarYear + 6) % 10] + " " + CHI[(lunarYear + 8) % 12];
+  }
+
+  function getCanChiDay(jd) {
+    return CAN[(jd + 9) % 10] + " " + CHI[(jd + 1) % 12];
+  }
+
+  // =========================================================================
+  // HÀM KHỬ LƯU ẢNH (GHOSTING) TRÊN MÀN HÌNH E-INK
+  // =========================================================================
+  function refreshEInkScreen() {
+    document.body.className = "eink-refresh";
+    setTimeout(function() {
+      document.body.className = "";
+    }, 500);
+  }
+
+  // =========================================================================
+  // 1. ĐỒNG HỒ & NGÀY THÁNG (DƯƠNG LỊCH + ÂM LỊCH)
   // =========================================================================
   function updateTime() {
     var now = new Date();
@@ -325,13 +514,27 @@
     var mStr = (minutes < 10 ? "0" : "") + minutes;
     document.getElementById("clock").innerHTML = hStr + ":" + mStr;
 
+    var d = now.getDate();
+    var m = now.getMonth() + 1;
+    var y = now.getFullYear();
+
     var days = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
-    var dateStr = days[now.getDay()] + ", " + now.getDate() + " Tháng " + (now.getMonth() + 1) + ", " + now.getFullYear();
+    var dateStr = days[now.getDay()] + ", " + d + " Tháng " + m + ", " + y;
     document.getElementById("date").innerHTML = dateStr;
+
+    // Tính ngày Âm lịch hôm nay
+    var lunar = convertSolar2Lunar(d, m, y);
+    var lDayStr = (lunar[0] <= 10) ? ("Mùng " + lunar[0]) : lunar[0];
+    var lMonthStr = lunar[1] + (lunar[3] === 1 ? " Nhuận" : "");
+    var canChiYear = getCanChiYear(lunar[2]);
+    var canChiDay = getCanChiDay(lunar[4]);
+
+    document.getElementById("lunar-date").innerHTML = 
+      "Âm lịch: <strong>" + lDayStr + " tháng " + lMonthStr + " năm " + canChiYear + "</strong> (Ngày " + canChiDay + ")";
   }
 
   // =========================================================================
-  // 2. LỊCH THÁNG TỰ ĐỘNG
+  // 2. BẢNG LỊCH THÁNG (TÍCH HỢP NGÀY ÂM NHỎ BÊN DƯỚI)
   // =========================================================================
   function generateCalendar() {
     var now = new Date();
@@ -355,7 +558,20 @@
           html += "<td></td>";
         } else {
           var classToday = (dayCount === today) ? " class='today'" : "";
-          html += "<td" + classToday + ">" + dayCount + "</td>";
+          
+          // Tính ngày Âm cho từng ô trong lịch
+          var lDate = convertSolar2Lunar(dayCount, month + 1, year);
+          var lDay = lDate[0];
+          var lMonth = lDate[1];
+          
+          // Nếu là Mùng 1 hoặc Rằm (15) thì hiển thị kèm tháng và gạch chân nổi bật
+          var lunarDisplay = (lDay === 1 || dayCount === 1) ? (lDay + "/" + lMonth) : lDay;
+          var specialClass = (lDay === 1 || lDay === 15) ? " lunar-special" : "";
+
+          html += "<td" + classToday + ">"
+                + "<span class='solar-num'>" + dayCount + "</span>"
+                + "<span class='lunar-num" + specialClass + "'>" + lunarDisplay + "</span>"
+                + "</td>";
           dayCount++;
         }
       }
@@ -366,12 +582,11 @@
   }
 
   // =========================================================================
-  // 3. API CÂU NÓI TRUYỀN CẢM HỨNG (DummyJSON + MyMemory Dịch tự động)
+  // 3. API CÂU NÓI TRUYỀN CẢM HỨNG
   // =========================================================================
   function updateQuote() {
     var apiUrl = "https://dummyjson.com/quotes/random";
     var xhr = new XMLHttpRequest();
-    // Thêm tham số thời gian thực để tránh bộ nhớ đệm (cache) trên trình duyệt Kindle
     xhr.open("GET", apiUrl + "?t=" + new Date().getTime(), true);
     xhr.timeout = 10000;
 
@@ -431,13 +646,12 @@
     var quoteEl = document.getElementById("quote-text");
     var authorEl = document.getElementById("quote-author");
 
-    // Tự động thu nhỏ chữ nếu câu nói dài để không đẩy tràn màn hình Kindle
     if (text.length > 150) {
-      quoteEl.style.fontSize = "15px";
+      quoteEl.style.fontSize = "14px";
     } else if (text.length > 100) {
-      quoteEl.style.fontSize = "16px";
+      quoteEl.style.fontSize = "15px";
     } else {
-      quoteEl.style.fontSize = "18px";
+      quoteEl.style.fontSize = "17px";
     }
 
     quoteEl.innerHTML = "“" + text + "”";
@@ -450,7 +664,7 @@
   }
 
   // =========================================================================
-  // 4. API THỜI TIẾT HIỆN TẠI & DỰ BÁO 4 NGÀY (Open-Meteo)
+  // 4. API THỜI TIẾT HIỆN TẠI & DỰ BÁO 4 NGÀY
   // =========================================================================
   function fetchWeatherAndForecast() {
     document.getElementById("location-name").innerHTML = LOCATION_NAME;
@@ -560,11 +774,9 @@
     setInterval(function() {
       updateTime();
       var now = new Date();
-      // Sang ngày mới lúc 00:00 -> cập nhật lại bảng lịch
       if (now.getHours() === 0 && now.getMinutes() === 0) {
         generateCalendar();
       }
-      // Đầu mỗi giờ (phút 00) -> tự động lấy câu nói truyền cảm hứng mới
       if (now.getMinutes() === 0) {
         updateQuote();
       }
@@ -572,6 +784,9 @@
 
     // Tự động cập nhật thời tiết & dự báo mỗi 30 phút
     setInterval(fetchWeatherAndForecast, 1800000);
+
+    // Tự động đảo màu màn hình 0.5 giây mỗi 3 giờ để khử lưu ảnh E-Ink
+    setInterval(refreshEInkScreen, 10800000);
   }
 
   window.onload = init;
