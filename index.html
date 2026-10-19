@@ -284,7 +284,7 @@
 <div class="container">
   <!-- 1. Khu vực Thời gian & Ngày Âm Dương -->
   <div class="time-section" onclick="refreshEInkScreen()">
-    <div id="clock" class="clock">00:00</div>
+    <!-- <div id="clock" class="clock">00:00</div> -->
     <div id="date" class="date">ĐANG TẢI...</div>
     <div id="lunar-date" class="lunar-header">Âm lịch: ...</div>
   </div>
@@ -512,7 +512,7 @@
     
     var hStr = (hours < 10 ? "0" : "") + hours;
     var mStr = (minutes < 10 ? "0" : "") + minutes;
-    document.getElementById("clock").innerHTML = hStr + ":" + mStr;
+    <!-- document.getElementById("clock").innerHTML = hStr + ":" + mStr; -->
 
     var d = now.getDate();
     var m = now.getMonth() + 1;
