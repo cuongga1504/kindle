@@ -23,8 +23,9 @@ jobs:
       # Kindle Paperwhite 1/2/3: 758 x 1024
       # Kindle Paperwhite 4 / Oasis 1: 1072 x 1448
       # Kindle Paperwhite 5 / Oasis 2-3: 1236 x 1648
-      SCREEN_WIDTH: 758
-      SCREEN_HEIGHT: 1024
+      # Độ phân giải chuẩn cho Kindle Basic 10th Gen (2019) - 167 PPI
+      SCREEN_WIDTH: 600
+      SCREEN_HEIGHT: 800
 
     steps:
       - name: 1. Tải mã nguồn về máy chủ ảo
