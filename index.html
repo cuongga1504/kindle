@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Kindle Screensaver Dashboard</title>
+<meta name="viewport" content="width=600, height=800, initial-scale=1.0, user-scalable=no">
+<title>Kindle Basic 10th Dashboard</title>
 <style>
   * {
     box-sizing: border-box;
@@ -11,62 +11,63 @@
     padding: 0;
   }
   
+  /* Khóa cứng độ phân giải 600x800 chuẩn Kindle Basic 10th Gen */
   body {
     background-color: #FFFFFF;
     color: #000000;
     font-family: "Bookerly", "Georgia", "Noto Serif", "Times New Roman", serif;
-    padding: 16px;
-    width: 758px;
-    height: 1024px;
+    padding: 10px;
+    width: 600px;
+    height: 800px;
     overflow: hidden;
   }
 
   .container {
-    border: 4px solid #000000;
-    padding: 18px 22px;
+    border: 3px solid #000000;
+    padding: 12px 14px;
     height: 100%;
     position: relative;
   }
 
-  /* 1. Phần Lịch Bloc (Thay thế đồng hồ) */
+  /* 1. Phần Lịch Bloc (Thu gọn vừa màn 600x800) */
   .hero-date-section {
     text-align: center;
     border-bottom: 3px solid #000000;
-    padding-bottom: 16px;
-    margin-bottom: 18px;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .hero-top-bar {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 6px;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
   }
 
   .big-day {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 112px;
+    font-size: 86px;
     font-weight: bold;
     line-height: 0.95;
     letter-spacing: 2px;
-    margin: 6px 0;
+    margin: 4px 0;
   }
 
   .lunar-box {
     display: inline-block;
     border: 2px solid #000000;
-    padding: 5px 16px;
-    margin-top: 8px;
-    font-size: 16px;
+    padding: 3px 12px;
+    margin-top: 6px;
+    font-size: 13px;
     font-weight: bold;
   }
 
   .canchi-sub {
-    font-size: 15px;
+    font-size: 13px;
     font-style: italic;
-    margin-top: 6px;
+    margin-top: 5px;
   }
 
   /* 2. Phần Thời tiết hiện tại & Lịch tháng */
@@ -74,8 +75,8 @@
     display: table;
     width: 100%;
     border-bottom: 3px solid #000000;
-    padding-bottom: 16px;
-    margin-bottom: 18px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
   }
 
   .col-weather, .col-calendar {
@@ -84,55 +85,55 @@
   }
 
   .col-weather {
-    width: 43%;
+    width: 42%;
     border-right: 2px solid #000000;
-    padding-right: 16px;
+    padding-right: 12px;
     text-align: center;
   }
 
   .col-calendar {
-    width: 57%;
-    padding-left: 16px;
+    width: 58%;
+    padding-left: 12px;
   }
 
   .section-title {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
     text-align: center;
     border-bottom: 2px solid #000000;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
   }
 
   /* Chi tiết Thời tiết hiện tại */
   .weather-icon {
-    font-size: 52px;
+    font-size: 38px;
     line-height: 1.1;
-    margin: 6px 0;
+    margin: 4px 0;
   }
 
   .weather-temp {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 42px;
+    font-size: 32px;
     font-weight: bold;
   }
 
   .weather-desc {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
-    margin: 6px 0 12px 0;
+    margin: 4px 0 8px 0;
   }
 
   .weather-details {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     text-align: left;
     border-top: 1px dashed #000000;
-    padding-top: 10px;
-    line-height: 1.6;
+    padding-top: 6px;
+    line-height: 1.45;
   }
 
   /* Chi tiết Bảng Lịch tháng (Dương + Âm) */
@@ -145,29 +146,29 @@
   }
 
   .calendar-table th {
-    padding: 5px 1px;
+    padding: 3px 1px;
     border-bottom: 1px solid #000000;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
   }
 
   .calendar-table td {
-    padding: 4px 1px;
+    padding: 2px 1px;
     vertical-align: middle;
   }
 
   .solar-num {
     display: block;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
-    line-height: 1.1;
+    line-height: 1.05;
   }
 
   .lunar-num {
     display: block;
-    font-size: 10px;
-    line-height: 1.1;
-    margin-top: 2px;
+    font-size: 9px;
+    line-height: 1.05;
+    margin-top: 1px;
   }
 
   .lunar-special {
@@ -178,14 +179,14 @@
   .today {
     background-color: #000000;
     color: #FFFFFF;
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   /* 3. Phần Dự báo 4 ngày tới */
   .forecast-section {
     border-bottom: 3px solid #000000;
-    padding-bottom: 16px;
-    margin-bottom: 18px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
   }
 
   .forecast-table {
@@ -198,7 +199,7 @@
 
   .forecast-table td {
     border-right: 1px dashed #000000;
-    padding: 4px 6px;
+    padding: 2px 4px;
     vertical-align: top;
   }
 
@@ -207,22 +208,22 @@
   }
 
   .f-day {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .f-icon {
-    font-size: 28px;
-    line-height: 1.2;
-    margin: 4px 0;
+    font-size: 22px;
+    line-height: 1.1;
+    margin: 2px 0;
   }
 
   .f-temp {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
   }
 
   .f-temp-min {
@@ -230,25 +231,25 @@
   }
 
   .f-rain {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   /* 4. Phần Câu nói truyền cảm hứng */
   .quote-section {
     text-align: center;
-    padding: 8px 12px;
+    padding: 4px 8px;
   }
 
   .quote-text {
-    font-size: 20px;
+    font-size: 16px;
     font-style: italic;
-    line-height: 1.4;
-    margin-bottom: 10px;
+    line-height: 1.35;
+    margin-bottom: 6px;
   }
 
   .quote-author {
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -256,10 +257,10 @@
 
   .footer-sync {
     position: absolute;
-    bottom: 8px;
-    right: 16px;
+    bottom: 6px;
+    right: 12px;
     font-family: "Helvetica Neue", "Arial", sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-style: italic;
   }
 </style>
@@ -267,7 +268,7 @@
 <body>
 
 <div class="container">
-  <!-- 1. Khu vực Lịch Bloc Cỡ Lớn (Thay thế đồng hồ) -->
+  <!-- 1. Khu vực Lịch Bloc Cỡ Lớn -->
   <div class="hero-date-section">
     <div id="hero-weekday-month" class="hero-top-bar">THỨ ... • THÁNG ... NĂM ...</div>
     <div id="hero-big-day" class="big-day">--</div>
@@ -283,9 +284,9 @@
       <div id="w-temp" class="weather-temp">--°C</div>
       <div id="w-desc" class="weather-desc">Đang tải...</div>
       <div class="weather-details">
-        <div><strong>Cảm giác như:</strong> <span id="w-feel">--°C</span></div>
+        <div><strong>Cảm giác:</strong> <span id="w-feel">--°C</span></div>
         <div><strong>Độ ẩm:</strong> <span id="w-hum">--%</span></div>
-        <div><strong>Tốc độ gió:</strong> <span id="w-wind">-- km/h</span></div>
+        <div><strong>Sức gió:</strong> <span id="w-wind">-- km/h</span></div>
       </div>
     </div>
 
@@ -341,7 +342,6 @@
     { text: "Sách là giấc mơ mà bạn cầm trên tay.", author: "Neil Gaiman" }
   ];
 
-  // Hàm lấy giờ chuẩn Việt Nam (GMT+7) bất kể máy chủ GitHub đặt ở đâu
   function getVietnamNow() {
     var now = new Date();
     var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -446,7 +446,7 @@
   }
 
   // =========================================================================
-  // 1. HIỂN THỊ LỊCH BLOC (BIG DATE) & ÂM LỊCH
+  // 1. HIỂN THỊ LỊCH BLOC & ÂM LỊCH
   // =========================================================================
   function updateHeroDate() {
     var now = getVietnamNow();
@@ -482,7 +482,7 @@
     var month = now.getMonth();
     var today = now.getDate();
 
-    document.getElementById("cal-title").innerHTML = "LỊCH THÁNG " + (month + 1) + " / " + year;
+    document.getElementById("cal-title").innerHTML = "THÁNG " + (month + 1) + " / " + year;
 
     var firstDay = new Date(year, month, 1).getDay();
     var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
@@ -567,7 +567,14 @@
   function renderQuoteOnScreen(text, author) {
     var quoteEl = document.getElementById("quote-text");
     var authorEl = document.getElementById("quote-author");
-    quoteEl.style.fontSize = (text.length > 140) ? "16px" : "20px";
+    // Co chữ tự động vừa khung 600px của Kindle Basic 10th
+    if (text.length > 150) {
+      quoteEl.style.fontSize = "13px";
+    } else if (text.length > 100) {
+      quoteEl.style.fontSize = "14px";
+    } else {
+      quoteEl.style.fontSize = "16px";
+    }
     quoteEl.innerHTML = "“" + text + "”";
     authorEl.innerHTML = "— " + author + " —";
   }
@@ -614,7 +621,7 @@
 
   function renderForecast(daily) {
     var html = "";
-    var shortDays = ["CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+    var shortDays = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
     for (var i = 1; i <= 4; i++) {
       if (!daily.time[i]) break;
       var parts = daily.time[i].split("-");
