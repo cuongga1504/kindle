@@ -99,7 +99,9 @@ table{width:100%;border-collapse:collapse;text-align:center;table-layout:fixed}
 var LOCATION_NAME = "ĐỒNG NAI";
 var LAT = 10.95, LON = 106.82;
 var TZ = "Asia%2FHo_Chi_Minh";
+var QUOTE_TRANSLATE_VI = true;   // dịch câu nói sang tiếng Việt (MyMemory); false = giữ tiếng Anh
 
+// Danh sách dự phòng, chỉ dùng khi API câu nói bị lỗi
 var QUOTES = [
   ["Hành trình vạn dặm luôn bắt đầu từ một bước chân.", "Lão Tử"],
   ["Sự giản dị là tột cùng của sự tinh tế.", "Leonardo da Vinci"],
@@ -119,9 +121,9 @@ var QUOTES = [
 var SOLAR_HOL = {"1/1":"Tết Dương lịch","30/4":"Giải phóng miền Nam","1/5":"Quốc tế Lao động","2/9":"Quốc khánh"};
 var LUNAR_HOL = {"1/1":"Tết Nguyên đán","10/3":"Giỗ Tổ Hùng Vương","15/8":"Tết Trung thu"};
 
-var weatherOk = false, aqiDone = false;
+var weatherOk = false, aqiDone = false, quoteDone = false;
 function checkReady() {
-  if (weatherOk && aqiDone) document.body.setAttribute("data-ready", "1");
+  if (weatherOk && aqiDone && quoteDone) document.body.setAttribute("data-ready", "1");
 }
 function $(id) { return document.getElementById(id); }
 function pad(n) { return (n < 10 ? "0" : "") + n; }
@@ -132,7 +134,7 @@ function vnNow() {
 function getJSON(url, ok, fail) {
   var x = new XMLHttpRequest();
   x.open("GET", url, true);
-  x.timeout = 12000;
+  x.timeout = 8000;
   x.onreadystatechange = function () {
     if (x.readyState !== 4) return;
     if (x.status === 200) { try { ok(JSON.parse(x.responseText)); return; } catch (e) {} }
@@ -279,13 +281,35 @@ function renderCalendar() {
   $("cal-body").innerHTML = html;
 }
 
-// ===== 3. CÂU NÓI THEO NGÀY =====
-function renderQuote() {
-  var q = QUOTES[Math.floor(vnNow().getTime() / 86400000) % QUOTES.length];
+// ===== 3. CÂU NÓI TỪ API (dummyjson -> MyMemory dịch -> danh sách dự phòng) =====
+function showQuote(text, author) {
   var el = $("q-text");
-  el.style.fontSize = q[0].length > 100 ? "14px" : "16px";
-  el.innerHTML = "“" + q[0] + "”";
-  $("q-author").innerHTML = "— " + q[1] + " —";
+  el.style.fontSize = text.length > 150 ? "13px" : text.length > 100 ? "14px" : "16px";
+  el.textContent = "\u201C" + text + "\u201D";
+  $("q-author").textContent = "\u2014 " + author + " \u2014";
+  quoteDone = true;
+  checkReady();
+}
+function fallbackQuote() {
+  var q = QUOTES[Math.floor(vnNow().getTime() / 86400000) % QUOTES.length];
+  showQuote(q[0], q[1]);
+}
+function translateQuote(text, author) {
+  var url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) + "&langpair=en|vi";
+  getJSON(url, function (r) {
+    var vi = r.responseData && r.responseData.translatedText;
+    showQuote(vi && vi.indexOf("MYMEMORY WARNING") === -1 ? vi : text, author);
+  }, function () { showQuote(text, author); });
+}
+function renderQuote() {
+  var tries = 0;
+  (function pick() {
+    getJSON("https://dummyjson.com/quotes/random?t=" + new Date().getTime(), function (d) {
+      if (d.quote.length > 160 && ++tries < 3) return pick();   // tránh câu quá dài
+      if (QUOTE_TRANSLATE_VI) translateQuote(d.quote, d.author);
+      else showQuote(d.quote, d.author);
+    }, fallbackQuote);
+  })();
 }
 
 // ===== 4. THỜI TIẾT + DỰ BÁO =====
