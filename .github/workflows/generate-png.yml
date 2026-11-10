@@ -1,12 +1,9 @@
 name: Render Kindle Dashboard PNG
 
 on:
-  # Tự động chạy mỗi 30 phút
   schedule:
     - cron: '*/30 * * * *'
-  # Cho phép bấm nút chạy thử ngay lập tức trên giao diện GitHub
   workflow_dispatch:
-  # Tự động chạy lại mỗi khi bạn sửa file index.html
   push:
     paths:
       - 'index.html'
@@ -14,52 +11,73 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: kindle-render
+  cancel-in-progress: false
+
 jobs:
   build-image:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       TZ: 'Asia/Ho_Chi_Minh'
-      # Thay đổi độ phân giải dưới đây theo dòng máy Kindle của bạn:
-      # Kindle Paperwhite 1/2/3: 758 x 1024
-      # Kindle Paperwhite 4 / Oasis 1: 1072 x 1448
-      # Kindle Paperwhite 5 / Oasis 2-3: 1236 x 1648
-      # Độ phân giải chuẩn cho Kindle Basic 10th Gen (2019) - 167 PPI
       SCREEN_WIDTH: 600
       SCREEN_HEIGHT: 800
 
     steps:
-      - name: 1. Tải mã nguồn về máy chủ ảo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 2. Cài đặt ফông chữ Tiếng Việt & ImageMagick
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cài font & ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-noto fonts-noto-color-emoji imagemagick
+          sudo apt-get install -y fonts-noto-core fonts-liberation imagemagick
 
-      - name: 3. Chụp ảnh trang index.html bằng Playwright
+      - name: Cài Playwright
         run: |
-          npx -y playwright install chromium
-          npx -y playwright screenshot \
-            --viewport-size="${SCREEN_WIDTH},${SCREEN_HEIGHT}" \
-            --wait-for-timeout=5000 \
-            file://${GITHUB_WORKSPACE}/index.html \
-            raw_dashboard.png
+          npm init -y >/dev/null
+          npm i playwright
+          npx playwright install --with-deps chromium
 
-      - name: 4. Chuyển đổi sang chuẩn PNG 8-bit Grayscale cho Kindle E-Ink
+      - name: Chụp ảnh (chờ dữ liệu tải xong)
+        run: |
+          cat > render.js <<'EOF'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage({
+              viewport: { width: 600, height: 800 },
+              deviceScaleFactor: 1
+            });
+            await page.goto('file://' + process.cwd() + '/index.html');
+            await page.waitForSelector('body[data-ready="1"]', { timeout: 40000 });
+            await page.screenshot({ path: 'raw_dashboard.png' });
+            await browser.close();
+          })().catch(e => { console.error(e); process.exit(1); });
+          EOF
+          node render.js
+
+      - name: Chuyển PNG 8-bit Grayscale
         run: |
           convert raw_dashboard.png \
             -gravity center \
             -extent ${SCREEN_WIDTH}x${SCREEN_HEIGHT} \
-            -colorspace Gray \
-            -depth 8 \
-            -alpha off \
+            -colorspace Gray -depth 8 -alpha off \
             -define png:color-type=0 \
-            -strip \
+            -interlace none -strip \
             dashboard.png
+          file dashboard.png
 
-      - name: 5. Lưu ảnh dashboard.png lên kho GitHub
+      - name: Lưu ảnh lên repo
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "Kindle Bot"
+          git config user.email "actions@github.com"
+          git config user.name "Kindle Bot"
           git add dashboard.png
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update Kindle dashboard PNG" && git push)
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto update Kindle dashboard PNG"
+            git pull --rebase
+            git push
+          fi
